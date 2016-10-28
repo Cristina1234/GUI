@@ -2,7 +2,7 @@ package gui;
 
 import java.util.*;
 
-import javax.swing.JFrame;
+//import javax.swing.JFrame;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 @SuppressWarnings("serial")
@@ -35,6 +37,10 @@ public class Game extends Frame {
 	private String playerSelect;
 	private String compSelect;
 	
+	private int playerPoints = 0;
+	private int previousPlayerSc = 0;
+	private int computerPoints = 0;
+	private int previousCompSc = 0;;
 
 public Game() {
 	
@@ -86,15 +92,18 @@ public Game() {
 	setTitle("RockPaperScissorsLizardSpock");
 	setSize(800, 1000);
 	setVisible(true);
-	//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //exits the window 
+	// close window
+    addWindowListener(new WindowAdapter() {
+        public void windowClosing(WindowEvent we) {
+            System.exit(0);
+        }
+    });
 }
 
 	//inner class
 	class MyActionListener extends Applet implements ActionListener, ItemListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int playerPoints = 0;
-			int computerPoints = 0;
 			
 		//	while(playerPoints != 5 || computerPoints != 5){
 				
@@ -113,20 +122,8 @@ public Game() {
 				chklizard.addItemListener(this);
 				chkspock.addItemListener(this);
 			
-//				result.setText("Player chose Rock");
-//				chkrock.addItemListener(new ItemListener() {
-//					public void itemStateChanged(ItemEvent e) {
-//						result.setText("Player Chose Rock");
-//					}
-//				});
-				
 				chk = cbg.getSelectedCheckbox();
 				playerSelect = chk.getLabel();
-				
-				//playerChose.setText("Player chose " + playerSelect);
-				//String playerSelect = 
-				//result.setText(getLabel(cbg.getSelectedCheckbox()));
-			
 			
 				if((playerSelect == "Rock" && compSelect == "Lizard") || (playerSelect == "Rock" && compSelect == "Scissors") 
 						|| (playerSelect == "Lizard" && compSelect == "Hand") || (playerSelect == "Lizard" && compSelect == "Spock")
@@ -134,6 +131,9 @@ public Game() {
 						|| (playerSelect == "Scissors" && compSelect == "Hand") || (playerSelect == "Scissors" && compSelect == "Lizard")
 						|| (playerSelect == "Spock" && compSelect == "Rock") || (playerSelect == "Spock" && compSelect == "Scissors")) {
 					playerPoints++;
+					previousPlayerSc = Integer.parseInt(playerScInput.getText());
+					//convert int to string to be able na ma butang sa text field
+					playerScInput.setText(Integer.toString(previousPlayerSc + playerPoints));
 					System.out.println("Player chose " + playerSelect + " and computer chose " + compSelect + "\nPlayerPoints: " + playerPoints);
 					System.out.println("Player has won in this turn");
 				} else if((compSelect == "Rock" && playerSelect == "Lizard") || (compSelect == "Rock" && playerSelect == "Scissors") 
@@ -142,6 +142,8 @@ public Game() {
 						|| (compSelect == "Scissors" && playerSelect == "Hand") || (compSelect == "Scissors" && playerSelect == "Lizard")
 						|| (compSelect == "Spock" && playerSelect == "Rock") || (compSelect == "Spock" && playerSelect == "Scissors")) {
 					computerPoints++;
+					previousCompSc = Integer.parseInt(computerScInput.getText());
+					computerScInput.setText(Integer.toString(previousCompSc + computerPoints));					
 					System.out.println("Player chose " + playerSelect + " and computer chose " + compSelect + "\nComputerPoints: " + computerPoints);
 					System.out.println("Computer has won in this turn");
 				}
